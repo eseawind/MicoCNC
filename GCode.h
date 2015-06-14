@@ -1,6 +1,9 @@
 #ifndef GCode_H_
 #define GCode_H_
 #include "error.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct {
     float targetX, targetY;
@@ -9,6 +12,7 @@ typedef struct {
     int spindleSpeed;
     int GCommand;
 } CommandData;
+CommandData commandData;
 
 typedef struct {
     float currentX, currentY;
@@ -17,14 +21,14 @@ typedef struct {
     int toolType;
     int spindleSpeed;
     int GCommand;
-} currentData;
+} CurrentData;
 
 void init(void);
 void processCommand(void);
 
 char * getCommand(void);
-CommandData splitCommand(char * commandString);
-void setParameters(CommandData command);
+void splitCommand(char * commandString);
+void setParameters(void);
 bool ready(void);
 void run(void);
 

@@ -9,9 +9,8 @@ int  main(void){
 }
 
 void processCommand(void){
-    static CommandData command;
-    command = splitCommand(getCommand());
-    setParameters(command);
+    splitCommand(getCommand());
+    setParameters();
     if (ready()){
         run();
     }
@@ -22,29 +21,60 @@ char * getCommand(void){
 }
 
 //拆分命令
-CommandData splitCommand(char * commandString){
-    
+void splitCommand(char * commandString){
+    char * pch;
+    char commandChar;
+    float value;
+
+    pch = strtok(commandString, " ");
+    while (pch != NULL){
+        commandChar = pch[0];
+        value = atof(pch + 1);
+        switch (commandChar){
+            case 'G':
+               commandData.GCommand = (int)value; 
+                break;
+            case 'S':
+               commandData.spindleSpeed = (int)value; 
+                break;
+            case 'T':
+               commandData.toolType = (int)value; 
+                break;
+            case 'X':
+               commandData.targetX = value; 
+                break;
+            case 'Y':
+               commandData.targetY = value; 
+                break;
+            case 'F':
+               commandData.feedSpeed = (int)value; 
+                break;
+            default:
+                break;
+        }
+        pch = strtok(NULL, " ");
+    }
 }
 
 //根据拆分后的命令设置参数
-void setParameters(CommandData command){
-    setFeedSpeed(command.feedSpeed);
-    setSpindleSpeed(command.spindleSpeed);
-    setToolType(command.toolType);
-    setGCommand(command.GCommand);
-    setLine(command.targetX, command.targetY);
+void setParameters(){
+    setFeedSpeed(commandData.feedSpeed);
+    setSpindleSpeed(commandData.spindleSpeed);
+    setToolType(commandData.toolType);
+    setGCommand(commandData.GCommand);
+    setLine(commandData.targetX, commandData.targetY);
 }
 
 //各参数是否设置无误
 bool ready(void){
     int i;
     for (i = 0; i < ERROR; i++ ){
-        if (errorData[i].isError){
-           errorData[ERROR].isError = 1;
+        if ((*errorData[i]).isError){
+           (*errorData[ERROR]).isError = 1;
            // TODO: 将errorMsg追加到allError.errorMsg中去
         }
     }
-    if (errorData[ERROR].isError){
+    if ((*errorData[ERROR]).isError){
         return FALSE;
     }
     return TRUE;
