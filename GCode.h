@@ -1,3 +1,5 @@
+#ifndef GCode_H_
+#define GCode_H_
 #include "error.h"
 
 typedef struct {
@@ -36,3 +38,4 @@ void spindleRun(void);
 void toolRun(void);
 void feedRun(void);
 
+#endif /* GCode_H_ */
